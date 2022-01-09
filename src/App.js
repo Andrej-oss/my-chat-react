@@ -1,23 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import { StreamChart } from 'stream-chat';
+import { Chat } from "stream-chat-react";
+import Cookies from "universal-cookie";
+
+const apiKey = 'aq9zturtpmkk';
+
+const client = StreamChart.getClient(apiKey);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app__wrapper">
+      <h1>Chat Application</h1>
+      <Chat client={client} theme={"team dark"}>
+
+      </Chat>
     </div>
   );
 }
