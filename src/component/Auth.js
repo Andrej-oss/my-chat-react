@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import Cookies from "universal-cookie";
 
 import chatImage from './assets/image/chat.jfif'
 
@@ -10,6 +12,8 @@ const initialState = {
   phoneNumber: '',
   avatarUrl: ''
 };
+
+const cookies = new Cookies();
 
 const Auth = () => {
   const [form, setForm] = useState(initialState);
@@ -24,9 +28,25 @@ const Auth = () => {
     setSignUp((prevIsSignUp) => !prevIsSignUp);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(form);
+
+    const { fullName, userName, password, phoneNumber, avatarUrl } = form;
+    const URL = 'http://localhost:5000/auth';
+    const { data: {token, id, hashedPassword} } = await axios.post(`${URL}/${isSignUp ? 'signup' : 'login'}`, {
+      fullName, userName, password, phoneNumber
+    });
+
+    cookies.set('token', token);
+    cookies.set('id', id);
+    cookies.set('fullName', fullName);
+
+    if(isSignUp) {
+      cookies.set('hashedPassword', hashedPassword);
+      cookies.set('phoneNumber', phoneNumber);
+      cookies.set('avatarUrl', avatarUrl);
+    }
+    window.location.reload();
   }
 
   return (
